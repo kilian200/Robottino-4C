@@ -33,11 +33,11 @@ void setup()  {
     mySerial.begin(115200);
     Serial.begin(9600);
     delay(1000);
-    esp01cmd("AT");
+    esp01cmd("AT");  //attention
     delay(1000);
-    esp01cmd("AT+CWMODE=2");
+    esp01cmd("AT+CWMODE=2");//Set the wifi mode of Client/Station/AP
     delay(1000);
-    esp01cmd("AT+CWSAP=\"robottino\",\"robottino\",1,4");
+    esp01cmd("AT+CWSAP=\"robottino\",\"robottino\",1,4"); //Set the configuration of an ESP32 SoftAP, impost the SSID and Password
     delay(1000);
     esp01cmd("AT+CIFSR"); //show AP IP address
     esp01cmd("AT+CIPMUX=1"); //allow up to 1 connections at the time
@@ -48,8 +48,9 @@ void setup()  {
 
 void loop() {
     Serial.println("loop...");
-    while(esp01cmd("AT+CWLIF").substring(11,18) != "192.168") {
-      Serial.println("no connections so far... still waiting");
+    //AT+CWLIF obtain Client IP of the Wifi module
+    while(esp01cmd("AT+CWLIF").substring(11,18) != "192.168") { //when the client is connected it will appear its IP address
+      Serial.println("no connections so far... still waiting"); //it will continue until somehome its connected
       delay(1000);
     }
 
@@ -58,7 +59,7 @@ void loop() {
     //accept packets from any IP address/devices
     //Listen to local port 4567
     //outgoing packets could go to any remote host without restrictions...
-    esp01cmd("AT+CIPSTART=3,\"UDP\",\"0.0.0.0\",0,4567,2"); //starting UDP Socket Server 
+    esp01cmd("AT+CIPSTART=3,\"UDP\",\"0.0.0.0\",0,4567,2"); //starting UDP Socket Server (Application)
     
 //    String str = ;    
 //    Serial.println("received: "+esp01cmd("AT+CWLIF").substring(11,18));
